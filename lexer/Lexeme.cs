@@ -5,6 +5,7 @@ public class Lexeme
 {
     public enum LexemeTypes
     {
+        None,
         Name,
         LitNumber,
         LitBoolean,
