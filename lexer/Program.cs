@@ -41,7 +41,31 @@ namespace lexer
 
         private static string[] TokenizeIntoArray(string inputString)
         {
-            throw new NotImplementedException();
+            List<Lexeme> tokens = new();
+            int cursor = 0;
+            string token = "";
+
+            while (cursor < inputString.Length)
+            {
+                string currentCharacter = inputString[cursor].ToString();
+                string nextCharacter = cursor + 1 < inputString.Length ? inputString[cursor + 1].ToString() : "";
+
+                token += currentCharacter;
+                Lexeme.LexemeTypes currentType = Lexeme.FindType(token);
+                Lexeme.LexemeTypes nextType = nextCharacter is not "" ? Lexeme.FindType(nextCharacter) : Lexeme.LexemeTypes.None;
+                
+                if (nextCharacter is not "" && nextType != currentType || nextType is Lexeme.LexemeTypes.Operator && currentType is Lexeme.LexemeTypes.Operator)
+                {
+                    tokens.Add(new Lexeme(token));
+                    token = "";
+                }
+                else if (nextCharacter is "")
+                    tokens.Add(new Lexeme(token));
+
+                cursor++;
+            }
+
+            return (from x in tokens select x.ToString()).ToArray();
         }
 
         private static void HelpMessage()
